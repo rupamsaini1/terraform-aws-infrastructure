@@ -24,21 +24,6 @@ resource "aws_launch_template" "this" {
       encrypted             = true
     }
   }
-
-  tags = var.tags
-
-  tag_specifications {
-    resource_type = "instance"
-
-    tags = var.tags
-  }
-
-  tag_specifications {
-    resource_type = "volume"
-
-    tags = var.tags
-  }
-
   lifecycle {
 
     create_before_destroy = true

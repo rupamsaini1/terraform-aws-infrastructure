@@ -41,21 +41,3 @@ variable "tags" {
 variable "target_group_name" {
   type = string
 }
-
-variable "vpc_id" {
-  type = string
-}
-
-variable "target_group_port" {
-  type = number
-}
-
-variable "target_group_protocol" {
-  type = string
-  default = "HTTP"
-}
-
-variable "health_check_path" {
-  type    = string
-  default = "/"
-}
