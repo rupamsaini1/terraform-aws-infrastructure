@@ -74,9 +74,11 @@ Note the `state_bucket` and `lock_table` outputs — they should match the value
 
 ### 2. Deploy an environment (e.g. `dev`)
 
+Each environment has its own partial S3 backend config in `backend/<env>.hcl`, keyed by environment (e.g. `backend/dev.hcl` uses key `dev/terraform.tfstate`) so every environment gets its own state file in the shared bootstrap bucket/lock table.
+
 ```bash
 cd environments/dev
-terraform init
+terraform init -backend-config=../../backend/dev.hcl
 terraform plan
 terraform apply
 ```
@@ -129,6 +131,8 @@ After apply, the ALB's public DNS name is available via the `alb_dns_name` outpu
 ## State management
 
 - Remote state is backed by S3 with DynamoDB locking, provisioned by `bootstrap/`.
+- Each environment gets its own state file in the shared bucket (e.g. `dev/terraform.tfstate`), keyed via its own `backend/<env>.hcl` — see [Deploy an environment](#2-deploy-an-environment-eg-dev).
+- The state bucket has versioning enabled, default SSE-AES256 encryption, and all public access blocked, so every environment's state inherits the same protections automatically.
 - `*.tfstate`, `*.tfvars`, and `.terraform/` are gitignored — they are not, and should not be, committed.
 
 ## Notes
